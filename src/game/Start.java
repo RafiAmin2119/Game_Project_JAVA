@@ -11,4 +11,8 @@ public abstract class Start extends JFrame {
     }
 
     public abstract void initLayout();
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes
