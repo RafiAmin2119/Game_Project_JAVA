@@ -1,8 +1,5 @@
 package game;
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 public class Player extends End {
     private String name;
     private String sign;
@@ -34,8 +31,7 @@ public class Player extends End {
     public void finish() {
         this.score = 0;
     }
-<<<<<<< Updated upstream
+
 }
-=======
-}
->>>>>>> Stashed changes
+
+
