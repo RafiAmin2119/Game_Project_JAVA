@@ -23,7 +23,7 @@ public class Window extends Start implements Restart {
         super(id, "Tic Tac Toe"); 
         p1 = new Player("P-1", "Rafi", "X");
         p2 = new Player("P-2", "Rijby", "O");
-        activeTurn = p1; // Rafi starts the first move turn
+        activeTurn = p1;
 
         engineLogic = new MainLogic(boxes);
         initLayout();
