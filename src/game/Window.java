@@ -33,7 +33,7 @@ public class Window extends Start implements Restart {
     private Image imgGameOver;
     
     private int totalMatches = 0;
-    private Font myFont = new Font("Impact", Font.PLAIN, 14); 
+    private Font myFont = new Font("Impact", Font.BOLD | Font.ITALIC, 14); 
     private Color mainRed = new Color(220, 20, 20); 
 
     public Window(String id) {
@@ -43,7 +43,7 @@ public class Window extends Start implements Restart {
         activeTurn = p1;
 
         try {
-            imgStart = new ImageIcon(getClass().getResource("starting.png")).getImage();
+            imgStart = new ImageIcon(getClass().getResource("StartingImage.png")).getImage();
             imgGameOver = new ImageIcon(getClass().getResource("GameOver.png")).getImage();
         } catch (Exception e) {
             System.out.println("Image loading error!");
@@ -98,11 +98,11 @@ public class Window extends Start implements Restart {
         topBar.setBackground(mainRed); 
 
         turnLabel = new JLabel(activeTurn.getName() + "'s Turn", SwingConstants.CENTER);
-        turnLabel.setFont(myFont.deriveFont(Font.BOLD, 36f)); 
+        turnLabel.setFont(myFont.deriveFont(42f)); 
         turnLabel.setForeground(Color.WHITE);
 
         scoreLabel = new JLabel(p1.getName() + " : " + p1.getScore() + "  |  " + p2.getName() + " : " + p2.getScore(), SwingConstants.CENTER);
-        scoreLabel.setFont(myFont.deriveFont(Font.PLAIN, 18f));
+        scoreLabel.setFont(myFont.deriveFont(20f)); 
         scoreLabel.setForeground(Color.WHITE);
 
         topBar.add(turnLabel);
@@ -117,7 +117,7 @@ public class Window extends Start implements Restart {
                 final int row = i;
                 final int col = j;
                 boxes[row][col] = new JButton("");
-                boxes[row][col].setFont(myFont.deriveFont(Font.BOLD, 90f)); 
+                boxes[row][col].setFont(myFont.deriveFont(90f)); 
                 boxes[row][col].setForeground(mainRed); 
                 boxes[row][col].setBackground(Color.WHITE);
                 boxes[row][col].setFocusPainted(false);
@@ -202,10 +202,10 @@ public class Window extends Start implements Restart {
                     g2.setColor(Color.BLACK);
                     g2.fillRect(0, 0, 600, 600);
                 }
-                txt = "Press Z to restart the game"; // এখানে 'start' বদলে 'restart' করে দেওয়া হয়েছে
+                txt = "Press Z to restart the game"; 
             }
 
-            g2.setFont(myFont.deriveFont(Font.BOLD, 30f));
+            g2.setFont(myFont.deriveFont(32f)); 
             g2.setColor(mainRed);
 
             int txtWidth = g2.getFontMetrics().stringWidth(txt);
