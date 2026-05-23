@@ -1,4 +1,3 @@
-
 package game;
 
 import java.awt.BorderLayout;
@@ -29,11 +28,13 @@ public class Window extends Start implements Restart {
     private JLabel scoreLabel;
     private MainLogic engineLogic;
 
-    private boolean isGameStarted = false;
-    private Image startImg;
+    private int screenMode = 0; 
+    private Image imgStart;
+    private Image imgGameOver;
     
-    private Font customFont = new Font("Impact", Font.PLAIN, 14); 
-    private final Color themeRed = new Color(220, 20, 20); 
+    private int totalMatches = 0;
+    private Font myFont = new Font("Impact", Font.PLAIN, 14); 
+    private Color mainRed = new Color(220, 20, 20); 
 
     public Window(String id) {
         super(id, "Tic Tac Toe"); 
@@ -42,9 +43,10 @@ public class Window extends Start implements Restart {
         activeTurn = p1;
 
         try {
-            startImg = new ImageIcon(getClass().getResource("starting.png")).getImage();
+            imgStart = new ImageIcon(getClass().getResource("starting.png")).getImage();
+            imgGameOver = new ImageIcon(getClass().getResource("GameOver.png")).getImage();
         } catch (Exception e) {
-            System.out.println("Starting image load failed!");
+            System.out.println("Image loading error!");
         }
 
         engineLogic = new MainLogic(boxes);
@@ -61,64 +63,80 @@ public class Window extends Start implements Restart {
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (!isGameStarted && (e.getKeyCode() == KeyEvent.VK_A)) {
-                    isGameStarted = true;
-                    showGameInterface(); 
+                if (screenMode == 0 && e.getKeyCode() == KeyEvent.VK_A) {
+                    screenMode = 1;
+                    loadGameUi(); 
+                } else if (screenMode == 2 && e.getKeyCode() == KeyEvent.VK_Z) {
+                    totalMatches = 0;
+                    refreshGame();
+                    screenMode = 1;
+                    loadGameUi();
                 }
             }
         });
         this.setFocusable(true);
 
-        StartPanel startPanel = new StartPanel();
-        this.add(startPanel);
+        loadMenuScreen();
 
         System.out.println("Match engine started. Active user instances created: " + Player.countPlayers);
         this.setVisible(true);
     }
 
-    private void showGameInterface() {
+    private void loadMenuScreen() {
+        this.getContentPane().removeAll();
+        this.setLayout(new BorderLayout());
+        MenuPanel menuPanel = new MenuPanel();
+        this.add(menuPanel, BorderLayout.CENTER);
+        this.revalidate();
+        this.repaint();
+    }
+
+    private void loadGameUi() {
         this.getContentPane().removeAll(); 
         this.setLayout(new BorderLayout());
 
-        JPanel topPanel = new JPanel(new GridLayout(2, 1));
-        topPanel.setBackground(themeRed); 
+        JPanel topBar = new JPanel(new GridLayout(2, 1));
+        topBar.setBackground(mainRed); 
 
         turnLabel = new JLabel(activeTurn.getName() + "'s Turn", SwingConstants.CENTER);
-        turnLabel.setFont(customFont.deriveFont(Font.BOLD, 36f)); 
+        turnLabel.setFont(myFont.deriveFont(Font.BOLD, 36f)); 
         turnLabel.setForeground(Color.WHITE);
 
         scoreLabel = new JLabel(p1.getName() + " : " + p1.getScore() + "  |  " + p2.getName() + " : " + p2.getScore(), SwingConstants.CENTER);
-        scoreLabel.setFont(customFont.deriveFont(Font.PLAIN, 18f));
+        scoreLabel.setFont(myFont.deriveFont(Font.PLAIN, 18f));
         scoreLabel.setForeground(Color.WHITE);
 
-        topPanel.add(turnLabel);
-        topPanel.add(scoreLabel);
-        this.add(topPanel, BorderLayout.NORTH);
+        topBar.add(turnLabel);
+        topBar.add(scoreLabel);
+        this.add(topBar, BorderLayout.NORTH);
 
-        JPanel centerPanel = new JPanel(new GridLayout(3, 3));
-        centerPanel.setBackground(themeRed); 
+        JPanel gridPanel = new JPanel(new GridLayout(3, 3));
+        gridPanel.setBackground(mainRed); 
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                final int r = i;
-                final int c = j;
-                boxes[r][c] = new JButton("");
-                boxes[r][c].setFont(customFont.deriveFont(Font.BOLD, 90f)); 
-                boxes[r][c].setForeground(themeRed); 
-                boxes[r][c].setBackground(Color.WHITE);
-                boxes[r][c].setFocusPainted(false);
-                boxes[r][c].addActionListener(new ActionListener() {
+                final int row = i;
+                final int col = j;
+                boxes[row][col] = new JButton("");
+                boxes[row][col].setFont(myFont.deriveFont(Font.BOLD, 90f)); 
+                boxes[row][col].setForeground(mainRed); 
+                boxes[row][col].setBackground(Color.WHITE);
+                boxes[row][col].setFocusPainted(false);
+                boxes[row][col].addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (boxes[r][c].getText().equals("")) {
-                            boxes[r][c].setText(activeTurn.getSign());
+                        if (boxes[row][col].getText().equals("")) {
+                            boxes[row][col].setText(activeTurn.getSign());
+                            
                             if (engineLogic.checkWinner(activeTurn.getSign())) {
                                 activeTurn.updateScore();
                                 JOptionPane.showMessageDialog(null, "Match finished! " + activeTurn.getName() + " wins!");
-                                refreshGame();
+                                totalMatches++;
+                                checkRounds();
                             } else if (engineLogic.checkDraw()) {
                                 JOptionPane.showMessageDialog(null, "Match finished! The layout is a Draw!");
-                                refreshGame();
+                                totalMatches++;
+                                checkRounds();
                             } else {
                                 activeTurn = (activeTurn == p1) ? p2 : p1;
                                 turnLabel.setText(activeTurn.getName() + "'s Turn");
@@ -126,12 +144,22 @@ public class Window extends Start implements Restart {
                         }
                     }
                 });
-                centerPanel.add(boxes[r][c]);
+                gridPanel.add(boxes[row][col]);
             }
         }
-        this.add(centerPanel, BorderLayout.CENTER);
+        this.add(gridPanel, BorderLayout.CENTER);
         this.revalidate();
         this.repaint();
+    }
+
+    private void checkRounds() {
+        if (totalMatches >= 3) {
+            screenMode = 2;
+            loadMenuScreen();
+            this.requestFocusInWindow();
+        } else {
+            refreshGame();
+        }
     }
 
     @Override
@@ -142,32 +170,42 @@ public class Window extends Start implements Restart {
             }
         }
         activeTurn = p1; 
-        turnLabel.setText(activeTurn.getName() + "'s Turn");
-        scoreLabel.setText(p1.getName() + " : " + p1.getScore() + "  |  " + p2.getName() + " : " + p2.getScore());
+        if (turnLabel != null) turnLabel.setText(activeTurn.getName() + "'s Turn");
+        if (scoreLabel != null) scoreLabel.setText(p1.getName() + " : " + p1.getScore() + "  |  " + p2.getName() + " : " + p2.getScore());
     }
 
-    private class StartPanel extends JPanel {
+    private class MenuPanel extends JPanel {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            if (startImg != null) {
-                g2d.drawImage(startImg, 0, 0, 600, 600, this);
-            } else {
-                g2d.setColor(Color.WHITE);
-                g2d.fillRect(0, 0, 600, 600);
+            String txt = "";
+            if (screenMode == 0) {
+                if (imgStart != null) {
+                    g2.drawImage(imgStart, 0, 0, 600, 600, this);
+                } else {
+                    g2.setColor(Color.WHITE);
+                    g2.fillRect(0, 0, 600, 600);
+                }
+                txt = "Press A to start the game";
+            } else if (screenMode == 2) {
+                if (imgGameOver != null) {
+                    g2.drawImage(imgGameOver, 0, 0, 600, 600, this);
+                } else {
+                    g2.setColor(Color.BLACK);
+                    g2.fillRect(0, 0, 600, 600);
+                }
+                txt = "Press Z to start the game";
             }
 
-            g2d.setFont(customFont.deriveFont(Font.BOLD, 30f));
-            g2d.setColor(themeRed);
+            g2.setFont(myFont.deriveFont(Font.BOLD, 30f));
+            g2.setColor(mainRed);
 
-            String text = "Press A to start the game";
-            int stringWidth = g2d.getFontMetrics().stringWidth(text);
-            int x = (600 - stringWidth) / 2;
-            
-            g2d.drawString(text, x, 500); 
+            int txtWidth = g2.getFontMetrics().stringWidth(txt);
+            int posX = (600 - txtWidth) / 2;
+            g2.drawString(txt, posX, 500); 
         }
     }
 }
