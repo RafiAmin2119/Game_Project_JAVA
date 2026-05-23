@@ -68,7 +68,6 @@ public class Window extends Start implements Restart {
                     loadGameUi(); 
                 } else if (screenMode == 2 && e.getKeyCode() == KeyEvent.VK_Z) {
                     totalMatches = 0;
-                    refreshGame();
                     screenMode = 1;
                     loadGameUi();
                 }
@@ -147,9 +146,13 @@ public class Window extends Start implements Restart {
                 gridPanel.add(boxes[row][col]);
             }
         }
+        
         this.add(gridPanel, BorderLayout.CENTER);
-        this.revalidate();
-        this.repaint();
+        
+        refreshGame(); 
+        
+        this.getContentPane().revalidate();
+        this.getContentPane().repaint();
     }
 
     private void checkRounds() {
@@ -166,7 +169,9 @@ public class Window extends Start implements Restart {
     public void refreshGame() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                boxes[i][j].setText("");
+                if (boxes[i][j] != null) {
+                    boxes[i][j].setText("");
+                }
             }
         }
         activeTurn = p1; 
@@ -197,7 +202,7 @@ public class Window extends Start implements Restart {
                     g2.setColor(Color.BLACK);
                     g2.fillRect(0, 0, 600, 600);
                 }
-                txt = "Press Z to start the game";
+                txt = "Press Z to restart the game"; // এখানে 'start' বদলে 'restart' করে দেওয়া হয়েছে
             }
 
             g2.setFont(myFont.deriveFont(Font.BOLD, 30f));
