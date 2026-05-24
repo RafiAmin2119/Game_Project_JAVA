@@ -6,7 +6,7 @@ A lightweight, interactive 2-player Tic-Tac-Toe game developed using Java Swing 
 
 ## 👥 Developers
 * **Rafi Amin** (Reg No: 2023831007)
-* **Rijby Sarkar** (Reg No: 2023831023)
+* **Rijby Sarkar** (Reg No: 2023831013)
 
 ---
 
