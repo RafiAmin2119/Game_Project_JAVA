@@ -1,35 +1,37 @@
-# Java TicTacToe Game
+# 🎮 Java TicTacToe Game
 
-This is a simple 2-player Tic-Tac-Toe game with a desktop user interface (GUI). We built this project to practice object-oriented programming (OOP) principles in Java for our Lab Final.
-
-## Developers
-* **Rafi Amin-2023831007**
-* **Rijby Sarkar-2023831023**
+A lightweight, interactive 2-player Tic-Tac-Toe game developed using Java Swing (GUI). This project was designed and implemented as a practical application of **Object-Oriented Programming (OOP)** principles for our Lab Final evaluation.
 
 ---
 
-## What We Used
-* **Java Swing:** To create the 3x3 game window, buttons, and layouts.
-* **OOP Design:** Divided the game logic, players, and interface into different classes.
+## 👥 Developers
+* **Rafi Amin** (Reg No: 2023831007)
+* **Rijby Sarkar** (Reg No: 2023831023)
 
 ---
 
-## OOP Rules Followed in This Project
-
-1. **Encapsulation:** Player data like name and scores are kept private in the `Player` class and can only be accessed using getter methods.
-2. **Inheritance:** The `Player` class extends `End` abstract class, and the `Window` class extends `Start` abstract class to share properties.
-3. **Abstraction:** Used abstract classes (`Start`, `End`) and a `Restart` interface to plan the structure of the game safely.
-4. **Polymorphism:** Overrode methods like `initLayout()` and `refreshGame()` to reset or change the screen during gameplay.
+## 🛠️ Technology Stack & Architecture
+* **Java Swing & AWT:** Utilized for building the 3x3 grid system, custom window states, and dynamic view revalidation.
+* **Modular OOP Architecture:** Cleanly decoupled core game mechanics, user interface, and player state management across separate classes.
 
 ---
 
-## Folders
-* `src/game/Main.java` - Run this file to start the game.
-* `src/game/` - Contains all other classes like player data, graphics, and win-loss logic.
+## 🏛️ OOP Principles Implemented
+
+1. **Encapsulation:** Player properties (names, symbols, and scores) are strictly encapsulated using `private` fields, exposed safely via public getter/setter mechanisms.
+2. **Inheritance:** Promoted code reusability and structured hierarchy by extending the `Player` class from `End` and the main `Window` class from `Start`.
+3. **Abstraction:** Defined structural blueprints safely using abstract classes (`Start`, `End`) and a dedicated `Restart` interface to enforce strict contract compliance.
+4. **Polymorphism:** Implemented runtime polymorphism via Method Overriding (`@Override`) on core functions like `initLayout()` and `refreshGame()` to dynamically update UI states.
 
 ---
 
-## How to Play
-1. Download or clone this project.
-2. Open the project in your IDE (like VS Code).
-3. Run the `Main.java` file. 
+## 📁 Project Structure
+* `src/game/Main.java` - The main entry point to launch the application.
+* `src/game/` - Core directory containing game engines, UI frame logic, and player entities.
+
+---
+
+## 🚀 Getting Started
+
+1. **Open in IDE:** Open the project folder in your preferred IDE (such as VS Code, IntelliJ IDEA, or NetBeans).
+2. **Run Application:** Locate and execute the `Main.java` file to launch and start playing the game.
