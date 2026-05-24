@@ -10,8 +10,7 @@ The game includes a 3×3 board, score counting, multiple rounds, and winner mess
 
 ## 🛠️ Technologies Used
 - Java  
-- Java Swing & AWT  
-- Object-Oriented Programming (OOP)
+- OOP Concepts  
 
 ## 🚀 Run the Project
 1. Open the project in any Java IDE.  
